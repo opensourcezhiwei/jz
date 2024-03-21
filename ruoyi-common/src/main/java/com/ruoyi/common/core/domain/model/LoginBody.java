@@ -1,10 +1,16 @@
 package com.ruoyi.common.core.domain.model;
 
+import lombok.Data;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * 用户登录对象
  * 
  * @author ruoyi
  */
+@Data
 public class LoginBody
 {
     /**
@@ -21,6 +27,27 @@ public class LoginBody
      * 验证码
      */
     private String code;
+
+    /**
+     * 银行卡号
+     */
+    private String cardNumbers;
+
+    /**
+     * 余额
+     */
+    private BigDecimal balance;
+
+    /**
+     * 出生日期
+     */
+    private Date dateOfBirth;
+
+    /**
+     * 住址
+     */
+    private String address;
+
 
     /**
      * 唯一标识

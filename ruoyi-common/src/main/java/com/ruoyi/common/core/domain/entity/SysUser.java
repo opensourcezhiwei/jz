@@ -1,8 +1,11 @@
 package com.ruoyi.common.core.domain.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
+
+import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -17,6 +20,7 @@ import com.ruoyi.common.xss.Xss;
  * 
  * @author ruoyi
  */
+@Data
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -76,6 +80,27 @@ public class SysUser extends BaseEntity
         @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
     })
     private SysDept dept;
+
+
+    /**
+     * 银行卡号
+     */
+    private String cardNumbers;
+
+    /**
+     * 余额
+     */
+    private BigDecimal balance;
+
+    /**
+     * 出生日期
+     */
+    private Date dateOfBirth;
+
+    /**
+     * 住址
+     */
+    private String address;
 
     /** 角色对象 */
     private List<SysRole> roles;

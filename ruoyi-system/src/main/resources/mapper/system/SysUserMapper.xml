@@ -156,7 +156,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">status,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			<if test="remark != null and remark != ''">remark,</if>
- 			create_time
+			<if test="cardNumbers != null and cardNumbers != ''">card_numbers,</if>
+			<if test="balance != null and balance != ''">balance,</if>
+			<if test="address != null and address != ''">address,</if>
+ 			create_time,
+			date_of_birth
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
  			<if test="deptId != null and deptId != ''">#{deptId},</if>
@@ -170,7 +174,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">#{status},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
- 			sysdate()
+			<if test="cardNumbers != null and cardNumbers != ''">#{cardNumbers},</if>
+			<if test="balance != null and balance != ''">#{balance},</if>
+			<if test="address != null and address != ''">#{address},</if>
+ 			sysdate(),
+			#{dateOfBirth}
  		)
 	</insert>
 	

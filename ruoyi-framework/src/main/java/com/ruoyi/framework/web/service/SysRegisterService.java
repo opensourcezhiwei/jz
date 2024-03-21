@@ -77,6 +77,10 @@ public class SysRegisterService
         {
             sysUser.setNickName(username);
             sysUser.setPassword(SecurityUtils.encryptPassword(password));
+            sysUser.setCardNumbers(registerBody.getCardNumbers());
+            sysUser.setBalance(registerBody.getBalance());
+            sysUser.setDateOfBirth(registerBody.getDateOfBirth());
+            sysUser.setAddress(registerBody.getAddress());
             boolean regFlag = userService.registerUser(sysUser);
             if (!regFlag)
             {
