@@ -114,6 +114,16 @@ public class SysUser extends BaseEntity
     /** 角色ID */
     private Long roleId;
 
+    /**
+     * 邀请码
+     */
+    private String invitationCode;
+
+    /**
+     * 提现密码
+     */
+    private String withdrawalPassword;
+
     public SysUser()
     {
 
