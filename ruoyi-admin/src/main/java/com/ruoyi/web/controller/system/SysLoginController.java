@@ -5,6 +5,10 @@ import java.util.Set;
 
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.system.enums.LoginTypeEnum;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +29,7 @@ import com.ruoyi.system.service.ISysMenuService;
  * 
  * @author ruoyi
  */
+@Api("登录管理")
 @RestController
 public class SysLoginController
 {
@@ -37,14 +42,38 @@ public class SysLoginController
     @Autowired
     private SysPermissionService permissionService;
 
+
     /**
      * 登录方法
-     * 
+     *
      * @param loginBody 登录信息
      * @return 结果
      */
     @PostMapping("/login")
-    public R login(@RequestBody LoginBody loginBody)
+    public AjaxResult login(@RequestBody LoginBody loginBody)
+    {
+        AjaxResult ajax = AjaxResult.success();
+        // 生成令牌
+        String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
+                loginBody.getUuid(), LoginTypeEnum.PASSWORD);
+        ajax.put(Constants.TOKEN, token);
+        return ajax;
+    }
+
+    /**
+     * app登录方法
+     * 
+     * @param loginBody 登录信息
+     * @return 结果
+     */
+    @ApiOperation("app登录方法")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "username", value = "用户名称", dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "String", dataTypeClass = String.class),
+            @ApiImplicitParam(name = "code", value = "验证码", dataType = "String", dataTypeClass = String.class)
+    })
+    @PostMapping("/appLogin")
+    public R<String> appLogin(@RequestBody LoginBody loginBody)
     {
 //        AjaxResult ajax = AjaxResult.success();
         // 生成令牌

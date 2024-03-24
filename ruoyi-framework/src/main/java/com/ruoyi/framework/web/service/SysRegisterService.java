@@ -17,6 +17,8 @@ import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 /**
  * 注册校验方法
@@ -41,6 +43,7 @@ public class SysRegisterService
     public String register(RegisterBody registerBody)
     {
         String msg = "", username = registerBody.getUsername(), password = registerBody.getPassword();
+
         SysUser sysUser = new SysUser();
         sysUser.setUserName(username);
 
@@ -73,6 +76,18 @@ public class SysRegisterService
         {
             msg = "保存用户'" + username + "'失败，注册账号已存在";
         }
+        else if (CollectionUtils.isEmpty(userService.selectByInvitationCode(registerBody.getInvitationCode()))){
+            msg = "邀请码不存在";
+        }
+        else if (StringUtils.isEmpty(registerBody.getWithdrawalPassword())){
+            msg = "提现密码不能为空";
+        }
+        else if (StringUtils.isEmpty(registerBody.getAddress())){
+            msg = "住址不能为空";
+        }
+        else if (ObjectUtils.isEmpty(registerBody.getDateOfBirth())){
+            msg = "出生日期不能为空";
+        }
         else
         {
             sysUser.setNickName(username);
@@ -81,6 +96,8 @@ public class SysRegisterService
             sysUser.setBalance(registerBody.getBalance());
             sysUser.setDateOfBirth(registerBody.getDateOfBirth());
             sysUser.setAddress(registerBody.getAddress());
+            sysUser.setInvitationCode(registerBody.getInvitationCode());
+            sysUser.setWithdrawalPassword(registerBody.getWithdrawalPassword());
             boolean regFlag = userService.registerUser(sysUser);
             if (!regFlag)
             {

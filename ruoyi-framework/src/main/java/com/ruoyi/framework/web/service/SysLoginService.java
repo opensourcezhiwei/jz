@@ -39,6 +39,7 @@ import com.ruoyi.system.service.ISysUserService;
 @Component
 public class SysLoginService
 {
+
     @Autowired
     private TokenService tokenService;
 
@@ -53,6 +54,7 @@ public class SysLoginService
 
     @Autowired
     private ISysConfigService configService;
+
 
     /**
      * 登录验证

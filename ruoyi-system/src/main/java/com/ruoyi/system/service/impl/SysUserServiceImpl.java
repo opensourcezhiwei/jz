@@ -541,4 +541,9 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return successMsg.toString();
     }
+
+    @Override
+    public List<SysUser> selectByInvitationCode(String invitationCode) {
+        return userMapper.selectByInvitationCode(invitationCode);
+    }
 }
