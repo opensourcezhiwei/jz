@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.PayOrderDao">
+
+	<select id="selectByCondition" parameterType="com.ruoyi.system.zny.entity.PayOrder" resultType="com.ruoyi.system.zny.vo.PayOrderVo">
+		SELECT o.*, p.name productName, u.tel tel, p.url url, p.remark productRemark
+		FROM z_pay_order o
+		LEFT JOIN z_product p ON o.productid = p.id
+		LEFT JOIN z_user u ON o.userid = u.id
+		<where>
+			<if test="param != null">
+				<if test="param.userid != null">
+					AND o.userId = #{param.userid}
+				</if>
+				<if test="param.productid != null">
+					AND o.productId = #{param.productid}
+				</if>
+				<if test="param.orderNum != null and param.orderNum != ''">
+					AND o.order_num = #{param.orderNum}
+				</if>
+				<if test="topId != null">
+					AND u.top_id = #{topId}
+				</if>
+				<if test="tel != null and tel != ''">
+					AND u.tel = #{tel}
+				</if>
+				<if test="param.status != null">
+					AND o.`status` = #{param.status}
+				</if>
+				<if test="param.type != null">
+					AND o.type = #{param.type}
+				</if>
+			</if>
+			<if test="startTime != null">
+				AND o.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND o.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+			<if test="successStartTime != null">
+				AND o.update_time >= #{successStartTime}
+			</if>
+			<if test="endTime != null">
+				AND o.update_time <![CDATA[ <= ]]> #{successEndTime}
+			</if>
+			<if test="statusList != null and statusList.size > 0">
+				AND o.`status` IN 
+				<foreach collection="statusList" item="status" open="(" close=")" separator=",">
+					#{status}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY o.id DESC
+	</select>
+	
+	<select id="totalRateByCondition" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(SUM(o.rate), 0) money, IFNULL(COUNT(1), 0) count
+		FROM z_pay_order o
+		LEFT JOIN z_user u ON o.userid = u.id
+		<where>
+			<if test="param != null">
+				<if test="param.userid != null">
+					AND o.userid = #{param.userid}
+				</if>
+				<if test="param.productid != null">
+					AND o.productid = #{param.productid}
+				</if>
+				<if test="topId != null">
+					AND u.top_id = #{topId}
+				</if>
+				<if test="tel != null and tel != ''">
+					AND u.tel = #{tel}
+				</if>
+				<if test="param.status != null">
+					AND o.`status` = #{param.status}
+				</if>
+				<if test="param.type != null">
+					AND o.type = #{param.type}
+				</if>
+			</if>
+			<if test="startTime != null">
+				AND o.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND o.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		</where>
+	</select>	
+	
+	<select id="totalByCondition" parameterType="com.ruoyi.system.zny.entity.PayOrder" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT count(distinct userId) count, sum(pay_amount) money
+		FROM z_pay_order o
+		LEFT JOIN z_product p ON o.productid = p.id
+		LEFT JOIN z_user u ON o.userid = u.id
+		<where>
+			<if test="param != null">
+				<if test="param.userid != null">
+					AND o.userid = #{param.userid}
+				</if>
+				<if test="param.productid != null">
+					AND o.productid = #{param.productid}
+				</if>
+				<if test="param.orderNum != null and param.orderNum != ''">
+					AND o.order_num = #{param.orderNum}
+				</if>
+				<if test="topId != null">
+					AND u.top_id = #{topId}
+				</if>
+				<if test="tel != null and tel != ''">
+					AND u.tel = #{tel}
+				</if>
+				<if test="param.status != null">
+					AND o.`status` = #{param.status}
+				</if>
+			</if>
+			<if test="startTime != null">
+				AND o.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND o.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		and o.type != 0
+		</where>
+		ORDER BY o.id DESC
+	</select>	
+
+	<select id="totalByStatusAndDate" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		select o.type count, SUM(o.pay_amount) money
+		from z_pay_order o
+		LEFT JOIN z_product p on o.productId = p.id
+		LEFT JOIN z_user u ON o.userid = u.id
+		<where>
+			<if test="topId != null">
+				AND u.top_id = #{topId}
+			</if>
+			<if test="status != null">
+				AND o.`status` = #{status}
+			</if>
+			<if test="startTime != null">
+				AND o.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND o.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		and o.type != 0
+		</where>
+		GROUP BY o.type
+	</select>
+	
+	<select id="payTotalByMinutes" resultType="com.ruoyi.system.zny.vo.ChildCount">
+		SELECT u.id userId, COUNT(p.id) count
+		FROM z_pay_order p
+		LEFT JOIN z_user u ON p.userId = u.id
+		<where>
+			<if test="userId != null">
+				AND u.id = #{userId}
+			</if>
+			<if test="tel != null and tel != ''">
+				AND u.tel = #{tel}
+			</if>
+			<if test="minutes != null">
+				AND p.create_time BETWEEN date_add(now(), interval - #{minutes} minute) AND now();
+			</if>
+		</where>
+		GROUP BY p.userId
+		ORDER BY COUNT(p.id) DESC
+	</select>
+	
+	<select id="selectTopByProductIdAndTop" resultType="com.ruoyi.system.zny.vo.RankVo">
+		select a.parent_id parentId, pa.realname parentRealname, a.user_id userId, u.realname realname, SUM(p.price) payAmount
+		from z_product_active a
+		left join z_product p ON a.product_id = p.id
+		left join z_user u ON a.user_id = u.id
+		left join z_user pa ON pa.id = a.parent_id
+		<where>
+			<if test="productId != null">
+				AND a.product_id = #{productId}
+			</if>
+		</where>
+		GROUP BY a.parent_id, pa.realname, a.user_id, u.realname
+	</select>
+	
+	<select id="selectLastOne" resultType="com.ruoyi.system.zny.entity.PayOrder">
+		SELECT * 
+		FROM z_pay_order
+		<where>
+			<if test="status != null">
+				AND `status` = #{status}
+			</if>
+			<if test="userId != null">
+				AND userid = #{userId}
+			</if>
+		</where>
+		ORDER BY id DESC 
+		LIMIT 1
+	</select>
+</mapper>

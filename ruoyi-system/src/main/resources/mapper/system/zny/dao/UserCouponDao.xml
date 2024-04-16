@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.UserCouponDao">
+
+	<resultMap id="UserCunponResultMap" type="com.ruoyi.system.zny.entity.UserCouponExtend">
+		<id property="id" column="id"/>
+		<result  property="userId" column="user_id" jdbcType="BIGINT"/>
+		<result property="couponId" column="coupon_id" jdbcType="BIGINT" />
+		<result  property="status" column="status" jdbcType="BIGINT"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP" />
+		<association property="couponCode" javaType="com.ruoyi.system.zny.entity.CouponCode">
+			<constructor>
+				<idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+				<arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+				<arg column="amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+				<arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+				<arg column="quota" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+			</constructor>
+		<!--	<id property="id" column="id"/>
+			<result  property="name" column="name" jdbcType="VARCHAR"/>
+			<result property="amount" column="amount" jdbcType="DECIMAL" />
+			<result  property="status" column="status" jdbcType="BIGINT"/>
+			<result property="quota" column="quota" jdbcType="DECIMAL" />-->
+		</association>
+	</resultMap>
+
+	<resultMap id="RedeemCodeResultMap" type="com.ruoyi.system.zny.entity.RedeemCodeExtend">
+		<id property="id" column="id"/>
+		<result  property="code" column="code" jdbcType="VARCHAR"/>
+		<result property="couponId" column="coupon_id" jdbcType="BIGINT" />
+		<result  property="status" column="status" jdbcType="BIGINT"/>
+		<result property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+		<result property="updateTime" column="update_time" jdbcType="TIMESTAMP" />
+		<association property="couponCode" javaType="com.ruoyi.system.zny.entity.CouponCode">
+			<constructor>
+				<idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+				<arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+				<arg column="amount" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+				<arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+				<arg column="quota" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+			</constructor>
+		</association>
+	</resultMap>
+
+	<select id="selectUserConponList" resultType="java.util.Map">
+		SELECT uc.user_id,uc.coupon_id ,cc.name,cc.amount, cc.quota,count(1) count
+		FROM  z_user_coupon uc left join z_coupon_code cc on uc.coupon_id = cc.id
+		where uc.user_id = #{userId} and uc.status = 1 and cc.status = 1   group by uc.user_id,uc.coupon_id
+		ORDER BY amount
+	</select>
+
+	<select id="selectAvailableCoupon" resultMap="UserCunponResultMap" >
+		SELECT uc.*, cc.*
+		FROM z_user_coupon uc left join z_coupon_code cc on uc.coupon_id = cc.id
+		where uc.user_id = #{userId} and uc.status = 1 and cc.status = 1 and cc.quota <![CDATA[ <= ]]> #{productPrice} order by cc.amount desc limit 1
+	</select>
+
+
+	<select id="selectRedeemCode" resultMap="RedeemCodeResultMap" >
+		SELECT uc.*, cc.*
+		FROM z_redeem_code uc left join z_coupon_code cc on uc.coupon_id = cc.id
+		where  uc.status = 1 and cc.status = 1 order by uc.id desc
+	</select>
+
+
+</mapper>

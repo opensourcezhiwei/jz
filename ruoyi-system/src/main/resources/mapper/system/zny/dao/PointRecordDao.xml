@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.PointRecordDao">
+
+	<select id="selectByCondition" resultType="com.ruoyi.system.zny.entity.PointRecord">
+		SELECT r.*
+		FROM z_point_record r
+		LEFT JOIN z_user u ON r.user_id = u.id
+		<where>
+			<if test="topId != null">
+				AND u.top_id = #{topId}
+			</if>
+			<if test="record != null">
+				<if test="record.type != null and record.type != ''">
+					AND r.type_desc = #{record.type}
+				</if>
+				<if test="record.userId != null">
+					AND r.user_id = #{record.userId}
+				</if>
+			</if>
+		</where>
+		ORDER BY r.id DESC
+	</select>
+
+
+	<select id="sumByTypeAndDate" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(SUM(r.point),0) money,count(1) count
+		FROM z_point_record r
+		LEFT JOIN z_user u ON r.user_id = u.id
+		<where>
+			<if test="topId != null">
+				AND u.top_id = #{topId}
+			</if>
+			<if test="record != null">
+				<if test="record.type != null and record.type != ''">
+					AND r.type_desc = #{record.type}
+				</if>
+				<if test="record.userId != null">
+					AND r.user_id = #{record.userId}
+				</if>
+				<if test="startTime != null">
+					AND r.create_time >= #{startTime}
+				</if>
+				<if test="endTime != null">
+					AND r.create_time <![CDATA[ <= ]]> #{endTime}
+				</if>
+			</if>
+		</where>
+	</select>
+
+</mapper>

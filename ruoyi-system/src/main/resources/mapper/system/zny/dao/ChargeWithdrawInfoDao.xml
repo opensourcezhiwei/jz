@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.ChargeWithdrawInfoDao">
+
+	<select id="selectByCondition" resultType="com.ruoyi.system.zny.entity.ChargeWithdrawInfo">
+		SELECT cw.*
+		FROM z_charge_withdraw_info cw
+		LEFT JOIN z_user u ON cw.user_id = u.id
+		<where>
+			<if test="topId != null">
+				AND u.top_id = #{topId}
+			</if>
+			<if test="condition != null">
+				<if test="condition.userId != null">
+					AND cw.user_id = #{condition.userId}
+				</if>
+				<if test="condition.tel != null and condition.tel != ''">
+					AND cw.tel = #{condition.tel}
+				</if>
+			</if>
+		</where>
+		ORDER BY update_time DESC, create_time DESC
+	</select>
+	
+	<update id="updateByDay">
+		UPDATE z_charge_withdraw_info SET charge_yesterday = charge_today, charge_today = 0, withdraw_yesterday = withdraw_today, withdraw_today = 0
+	</update>
+
+</mapper>

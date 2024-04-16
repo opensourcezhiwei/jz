@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.mapper.WebsiteParamMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.system.zny.entity.WebsiteParam">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="roll_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="kf_url1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="kf_url2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="kf_name1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="kf_qrcode1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="kf_name2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="kf_qrcode2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="kf_name3" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="kf_qrcode3" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="qq1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="qq2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="qq3" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="qq4" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="qq5" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="app_download_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="logo_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="start_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, `name`, roll_content, kf_url1, kf_url2, kf_name1, kf_qrcode1, kf_name2, kf_qrcode2, 
+    kf_name3, kf_qrcode3, qq1, qq2, qq3, qq4, qq5, app_download_url, logo_url, start_url
+  </sql>
+  <select id="selectByExample" parameterType="com.ruoyi.system.zny.entity.WebsiteParamExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from z_website_param
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from z_website_param
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from z_website_param
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ruoyi.system.zny.entity.WebsiteParamExample">
+    delete from z_website_param
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ruoyi.system.zny.entity.WebsiteParam">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into z_website_param (`name`, roll_content, kf_url1, 
+      kf_url2, kf_name1, kf_qrcode1, 
+      kf_name2, kf_qrcode2, kf_name3, 
+      kf_qrcode3, qq1, qq2, 
+      qq3, qq4, qq5, app_download_url, 
+      logo_url, start_url)
+    values (#{name,jdbcType=VARCHAR}, #{rollContent,jdbcType=VARCHAR}, #{kfUrl1,jdbcType=VARCHAR}, 
+      #{kfUrl2,jdbcType=VARCHAR}, #{kfName1,jdbcType=VARCHAR}, #{kfQrcode1,jdbcType=VARCHAR}, 
+      #{kfName2,jdbcType=VARCHAR}, #{kfQrcode2,jdbcType=VARCHAR}, #{kfName3,jdbcType=VARCHAR}, 
+      #{kfQrcode3,jdbcType=VARCHAR}, #{qq1,jdbcType=VARCHAR}, #{qq2,jdbcType=VARCHAR}, 
+      #{qq3,jdbcType=VARCHAR}, #{qq4,jdbcType=VARCHAR}, #{qq5,jdbcType=VARCHAR}, #{appDownloadUrl,jdbcType=VARCHAR}, 
+      #{logoUrl,jdbcType=VARCHAR}, #{startUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruoyi.system.zny.entity.WebsiteParam">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into z_website_param
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="rollContent != null">
+        roll_content,
+      </if>
+      <if test="kfUrl1 != null">
+        kf_url1,
+      </if>
+      <if test="kfUrl2 != null">
+        kf_url2,
+      </if>
+      <if test="kfName1 != null">
+        kf_name1,
+      </if>
+      <if test="kfQrcode1 != null">
+        kf_qrcode1,
+      </if>
+      <if test="kfName2 != null">
+        kf_name2,
+      </if>
+      <if test="kfQrcode2 != null">
+        kf_qrcode2,
+      </if>
+      <if test="kfName3 != null">
+        kf_name3,
+      </if>
+      <if test="kfQrcode3 != null">
+        kf_qrcode3,
+      </if>
+      <if test="qq1 != null">
+        qq1,
+      </if>
+      <if test="qq2 != null">
+        qq2,
+      </if>
+      <if test="qq3 != null">
+        qq3,
+      </if>
+      <if test="qq4 != null">
+        qq4,
+      </if>
+      <if test="qq5 != null">
+        qq5,
+      </if>
+      <if test="appDownloadUrl != null">
+        app_download_url,
+      </if>
+      <if test="logoUrl != null">
+        logo_url,
+      </if>
+      <if test="startUrl != null">
+        start_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="rollContent != null">
+        #{rollContent,jdbcType=VARCHAR},
+      </if>
+      <if test="kfUrl1 != null">
+        #{kfUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="kfUrl2 != null">
+        #{kfUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="kfName1 != null">
+        #{kfName1,jdbcType=VARCHAR},
+      </if>
+      <if test="kfQrcode1 != null">
+        #{kfQrcode1,jdbcType=VARCHAR},
+      </if>
+      <if test="kfName2 != null">
+        #{kfName2,jdbcType=VARCHAR},
+      </if>
+      <if test="kfQrcode2 != null">
+        #{kfQrcode2,jdbcType=VARCHAR},
+      </if>
+      <if test="kfName3 != null">
+        #{kfName3,jdbcType=VARCHAR},
+      </if>
+      <if test="kfQrcode3 != null">
+        #{kfQrcode3,jdbcType=VARCHAR},
+      </if>
+      <if test="qq1 != null">
+        #{qq1,jdbcType=VARCHAR},
+      </if>
+      <if test="qq2 != null">
+        #{qq2,jdbcType=VARCHAR},
+      </if>
+      <if test="qq3 != null">
+        #{qq3,jdbcType=VARCHAR},
+      </if>
+      <if test="qq4 != null">
+        #{qq4,jdbcType=VARCHAR},
+      </if>
+      <if test="qq5 != null">
+        #{qq5,jdbcType=VARCHAR},
+      </if>
+      <if test="appDownloadUrl != null">
+        #{appDownloadUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null">
+        #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="startUrl != null">
+        #{startUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ruoyi.system.zny.entity.WebsiteParamExample" resultType="java.lang.Long">
+    select count(*) from z_website_param
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update z_website_param
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rollContent != null">
+        roll_content = #{record.rollContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kfUrl1 != null">
+        kf_url1 = #{record.kfUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kfUrl2 != null">
+        kf_url2 = #{record.kfUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kfName1 != null">
+        kf_name1 = #{record.kfName1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kfQrcode1 != null">
+        kf_qrcode1 = #{record.kfQrcode1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kfName2 != null">
+        kf_name2 = #{record.kfName2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kfQrcode2 != null">
+        kf_qrcode2 = #{record.kfQrcode2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kfName3 != null">
+        kf_name3 = #{record.kfName3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.kfQrcode3 != null">
+        kf_qrcode3 = #{record.kfQrcode3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qq1 != null">
+        qq1 = #{record.qq1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qq2 != null">
+        qq2 = #{record.qq2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qq3 != null">
+        qq3 = #{record.qq3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qq4 != null">
+        qq4 = #{record.qq4,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qq5 != null">
+        qq5 = #{record.qq5,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appDownloadUrl != null">
+        app_download_url = #{record.appDownloadUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.logoUrl != null">
+        logo_url = #{record.logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startUrl != null">
+        start_url = #{record.startUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update z_website_param
+    set id = #{record.id,jdbcType=BIGINT},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      roll_content = #{record.rollContent,jdbcType=VARCHAR},
+      kf_url1 = #{record.kfUrl1,jdbcType=VARCHAR},
+      kf_url2 = #{record.kfUrl2,jdbcType=VARCHAR},
+      kf_name1 = #{record.kfName1,jdbcType=VARCHAR},
+      kf_qrcode1 = #{record.kfQrcode1,jdbcType=VARCHAR},
+      kf_name2 = #{record.kfName2,jdbcType=VARCHAR},
+      kf_qrcode2 = #{record.kfQrcode2,jdbcType=VARCHAR},
+      kf_name3 = #{record.kfName3,jdbcType=VARCHAR},
+      kf_qrcode3 = #{record.kfQrcode3,jdbcType=VARCHAR},
+      qq1 = #{record.qq1,jdbcType=VARCHAR},
+      qq2 = #{record.qq2,jdbcType=VARCHAR},
+      qq3 = #{record.qq3,jdbcType=VARCHAR},
+      qq4 = #{record.qq4,jdbcType=VARCHAR},
+      qq5 = #{record.qq5,jdbcType=VARCHAR},
+      app_download_url = #{record.appDownloadUrl,jdbcType=VARCHAR},
+      logo_url = #{record.logoUrl,jdbcType=VARCHAR},
+      start_url = #{record.startUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.system.zny.entity.WebsiteParam">
+    update z_website_param
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="rollContent != null">
+        roll_content = #{rollContent,jdbcType=VARCHAR},
+      </if>
+      <if test="kfUrl1 != null">
+        kf_url1 = #{kfUrl1,jdbcType=VARCHAR},
+      </if>
+      <if test="kfUrl2 != null">
+        kf_url2 = #{kfUrl2,jdbcType=VARCHAR},
+      </if>
+      <if test="kfName1 != null">
+        kf_name1 = #{kfName1,jdbcType=VARCHAR},
+      </if>
+      <if test="kfQrcode1 != null">
+        kf_qrcode1 = #{kfQrcode1,jdbcType=VARCHAR},
+      </if>
+      <if test="kfName2 != null">
+        kf_name2 = #{kfName2,jdbcType=VARCHAR},
+      </if>
+      <if test="kfQrcode2 != null">
+        kf_qrcode2 = #{kfQrcode2,jdbcType=VARCHAR},
+      </if>
+      <if test="kfName3 != null">
+        kf_name3 = #{kfName3,jdbcType=VARCHAR},
+      </if>
+      <if test="kfQrcode3 != null">
+        kf_qrcode3 = #{kfQrcode3,jdbcType=VARCHAR},
+      </if>
+      <if test="qq1 != null">
+        qq1 = #{qq1,jdbcType=VARCHAR},
+      </if>
+      <if test="qq2 != null">
+        qq2 = #{qq2,jdbcType=VARCHAR},
+      </if>
+      <if test="qq3 != null">
+        qq3 = #{qq3,jdbcType=VARCHAR},
+      </if>
+      <if test="qq4 != null">
+        qq4 = #{qq4,jdbcType=VARCHAR},
+      </if>
+      <if test="qq5 != null">
+        qq5 = #{qq5,jdbcType=VARCHAR},
+      </if>
+      <if test="appDownloadUrl != null">
+        app_download_url = #{appDownloadUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="logoUrl != null">
+        logo_url = #{logoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="startUrl != null">
+        start_url = #{startUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.system.zny.entity.WebsiteParam">
+    update z_website_param
+    set `name` = #{name,jdbcType=VARCHAR},
+      roll_content = #{rollContent,jdbcType=VARCHAR},
+      kf_url1 = #{kfUrl1,jdbcType=VARCHAR},
+      kf_url2 = #{kfUrl2,jdbcType=VARCHAR},
+      kf_name1 = #{kfName1,jdbcType=VARCHAR},
+      kf_qrcode1 = #{kfQrcode1,jdbcType=VARCHAR},
+      kf_name2 = #{kfName2,jdbcType=VARCHAR},
+      kf_qrcode2 = #{kfQrcode2,jdbcType=VARCHAR},
+      kf_name3 = #{kfName3,jdbcType=VARCHAR},
+      kf_qrcode3 = #{kfQrcode3,jdbcType=VARCHAR},
+      qq1 = #{qq1,jdbcType=VARCHAR},
+      qq2 = #{qq2,jdbcType=VARCHAR},
+      qq3 = #{qq3,jdbcType=VARCHAR},
+      qq4 = #{qq4,jdbcType=VARCHAR},
+      qq5 = #{qq5,jdbcType=VARCHAR},
+      app_download_url = #{appDownloadUrl,jdbcType=VARCHAR},
+      logo_url = #{logoUrl,jdbcType=VARCHAR},
+      start_url = #{startUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

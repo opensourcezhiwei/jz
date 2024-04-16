@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.ReleaseMoneyLogDao">
+
+	<select id="totalByType" resultType="java.math.BigDecimal">
+		SELECT IFNULL(SUM(l.money),0)
+		FROM z_release_money_log l
+		LEFT JOIN z_user u ON l.user_id = u.id
+		<where>
+			<if test="moneyType != null and moneyType != ''">
+				AND money_type = #{moneyType}
+			</if>
+			<if test="topId != null">
+				AND u.top_id = #{topId}
+			</if>
+			<if test="userId != null">
+				AND l.user_id = #{userId}
+			</if>
+			<if test="type != null and type != ''">
+				AND l.type = #{type}
+			</if>
+			<if test="moneyTypeList != null and moneyTypeList.size > 0">
+				AND l.money_type IN 
+				<foreach collection="moneyTypeList" item="moneyType" open="(" close=")" separator=",">
+					#{moneyType}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="totalByTypeLimit" resultType="com.ruoyi.system.zny.vo.RankVo">
+		SELECT u.id, u.realname, u.children productId, IFNULL(SUM(l.money),0) payAmount
+		FROM z_release_money_log l
+		LEFT JOIN z_user u ON l.user_id = u.id
+		<where>
+			<if test="moneyTypeList != null and moneyTypeList.size > 0">
+				AND l.money_type IN 
+				<foreach collection="moneyTypeList" item="moneyType" open="(" close=")" separator=",">
+					#{moneyType}
+				</foreach>
+			</if>		
+			<if test="startTime != null">
+				AND l.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND l.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		</where>
+		GROUP BY u.id, u.realname
+		ORDER BY SUM(l.money) DESC
+		LIMIT #{top}
+	</select>
+	
+	<select id="selectByCondition" parameterType="com.ruoyi.system.zny.entity.MoneyLog" resultType="com.ruoyi.system.zny.vo.MoneyLogVo">
+		SELECT l.*, u.tel tel
+		FROM z_release_money_log l
+		LEFT JOIN z_user u ON l.user_id = u.id
+		<where>
+			<if test="param != null">
+				<if test="param.type != null and param.type != ''">
+					AND l.type = #{param.type}
+				</if>
+				<if test="param.userId != null">
+					AND l.user_id = #{param.userId}
+				</if>
+				<if test="param.moneyType != null and param.moneyType != ''">
+					AND l.money_type = #{param.moneyType}
+				</if>
+				<if test="topId != null">
+					AND u.top_id = #{topId}
+				</if>
+				<if test="tel != null and tel != ''">
+					AND u.tel = #{tel}
+				</if>
+			</if>
+			<if test="excludeMoneyType != null and excludeMoneyType != ''">
+				AND l.money_type <![CDATA[ <> ]]> #{excludeMoneyType}
+			</if>
+			<if test="typeList != null and typeList.size > 0">
+				AND l.money_type IN 
+				<foreach collection="typeList" item="type" open="(" close=")" separator=",">
+					#{type}
+				</foreach>
+			</if>
+			<if test="startTime != null">
+				AND l.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND l.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		</where>
+		ORDER BY id DESC
+	</select>
+
+</mapper>

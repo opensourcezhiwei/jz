@@ -14,7 +14,7 @@ import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysConfig;
-import com.ruoyi.system.mapper.SysConfigMapper;
+import com.ruoyi.system.mapper.SysConfigRuoYiMapper;
 import com.ruoyi.system.service.ISysConfigService;
 
 /**
@@ -26,7 +26,7 @@ import com.ruoyi.system.service.ISysConfigService;
 public class SysConfigServiceImpl implements ISysConfigService
 {
     @Autowired
-    private SysConfigMapper configMapper;
+    private SysConfigRuoYiMapper configMapper;
 
     @Autowired
     private RedisCache redisCache;

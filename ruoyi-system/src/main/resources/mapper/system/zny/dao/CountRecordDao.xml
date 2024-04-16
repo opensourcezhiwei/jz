@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.CountRecordDao">
+
+	<select id="totalUser" resultType="com.ruoyi.system.zny.vo.PromoterActivityTotal">
+		SELECT COUNT(1) count, SUM(money) money
+		FROM promoter_count_record
+	</select>
+	
+	<select id="selectByCondition" resultType="com.ruoyi.system.zny.entity.CountLog">
+		SELECT * 
+		FROM promoter_count_record
+		<where>
+			<if test="record != null">
+				<if test="record.userId != null">
+					AND user_id = #{record.userId}
+				</if>
+			</if>
+		</where>
+		ORDER BY id DESC
+	</select>
+</mapper>

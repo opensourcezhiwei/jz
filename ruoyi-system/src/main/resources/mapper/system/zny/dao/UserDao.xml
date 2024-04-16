@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.UserDao">
+
+	<select id="selectByCondition" resultType="com.ruoyi.system.zny.vo.UserVo">
+		SELECT u.*, p.tel parentTel, p.realname parentRealname, p.share_id parentShareid,
+
+		(select count(id) from z_user where parent2_id = u.id) children2 ,
+		(select count(id) from z_user where parent3_id = u.id) children3
+		FROM z_user u
+		LEFT JOIN z_user p ON u.parent_id = p.id
+		<where>
+			<if test="user != null">
+				<if test="user.id != null">
+					AND u.id = #{user.id}
+				</if>
+				<if test="user.tel != null and user.tel != ''">
+					AND u.tel = #{user.tel}
+				</if>
+				<if test="user.loginPassword != null and user.loginPassword != ''">
+					AND u.login_password = #{user.loginPassword}
+				</if>
+				<if test="user.shareId != null">
+					AND u.share_id = #{user.shareId}
+				</if>
+				<if test="user.parentId != null">
+					AND u.parent_id = #{user.parentId}
+				</if>
+				<if test="user.parent2Id != null">
+					AND u.parent2_id = #{user.parent2Id}
+				</if>
+				<if test="user.parent3Id != null">
+					AND u.parent3_id = #{user.parent3Id}
+				</if>
+				<if test="user.idCard != null and user.idCard != ''">
+					AND u.id_card = #{user.idCard}
+				</if>
+				<if test="user.tradePassword != null and user.tradePassword != ''">
+					AND u.trade_password = #{user.tradePassword}
+				</if>
+				<if test="user.topId != null">
+					AND u.top_id = #{user.topId}
+				</if>
+				<if test="user.realname != null and user.realname != ''">
+					AND u.realname = #{user.realname}
+				</if>
+			</if>
+		</where>
+	</select>
+
+	<select id="selectByIds2" resultType="com.ruoyi.system.zny.vo.UserVo">
+		SELECT u.*, p.tel parentTel,p.share_id pShareId, p.realname parentRealname,
+		(select count(id) from z_user where parent2_id = u.id) children2 ,
+		(select count(id) from z_user where parent3_id = u.id) children3 ,
+		(select sum(children) from z_user where parent3_id = u.id) children4
+		FROM z_user u
+		LEFT JOIN z_user p ON u.parent_id = p.id
+		<where>
+			u.id in
+			<foreach close=")" collection="idList" item="listItem" open="(" separator=",">
+				#{listItem}
+			</foreach>
+		</where>
+		<if test="orderClause != null ">
+			order by u.id desc
+		</if>
+	</select>
+
+	<select id="selectGroupByParentId" resultType="com.ruoyi.system.zny.vo.ChildCount">
+		SELECT parent_id userId, IFNULL(COUNT(DISTINCT u.id),0) count
+		FROM z_user u left join z_bank_card c on u.tel = c.tel
+		WHERE parent_id is not null and id_card is not null and c.id is not null
+		GROUP BY parent_id
+		HAVING COUNT(1) >= #{minCount}
+	</select>	
+	
+	<select id="totalByDate" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(COUNT(1), 0) count, IFNULL(SUM(charge), 0) money
+		FROM z_user
+		<where>
+			<if test="startRegisterTime != null">
+				AND register_time >= #{startRegisterTime}
+			</if>
+			<if test="endRegisterTime != null">
+				AND register_time <![CDATA[ <= ]]> #{endRegisterTime}
+			</if>
+			<if test="topId != null">
+				AND top_id = #{topId}
+			</if>
+		</where>
+	</select>
+
+	<select id="totalProductMoney" resultType="java.math.BigDecimal">
+		SELECT IFNULL(SUM(product_money),0)
+		FROM z_user
+		<where>
+			<if test="topId != null">
+				top_id = #{topId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="totalByParentId" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(COUNT(1),0) count, IFNULL(SUM(buy_charge),0) money, IFNULL(SUM(withdraw),0) money2
+		FROM z_user
+		<where>
+			parent_id = #{userId}
+			<if test="startRegisterTime != null">
+				AND register_time >= #{startRegisterTime}
+			</if>
+			<if test="endRegisterTime != null">
+				AND register_time <![CDATA[ <= ]]> #{endRegisterTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="totalByParentIdAndVerify" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(COUNT(DISTINCT u.id),0) count, IFNULL(SUM(buy_charge),0) money, IFNULL(SUM(withdraw),0) money2
+		FROM z_user  u left join z_bank_card c on u.tel = c.tel
+		<where>
+			parent_id = #{userId} and id_card is not null and c.id is not null
+			<if test="startRegisterTime != null">
+				AND register_time >= #{startRegisterTime}
+			</if>
+			<if test="endRegisterTime != null">
+				AND register_time <![CDATA[ <= ]]> #{endRegisterTime}
+			</if>
+			<if test="lastLoginTime != null">
+				AND login_time >= #{lastLoginTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="totalByParent2Id" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(COUNT(1),0) count, IFNULL(SUM(buy_charge),0) money, IFNULL(SUM(withdraw),0) money2
+		FROM z_user 
+		<where>
+			parent2_id = #{userId}
+			<if test="startRegisterTime != null">
+				AND register_time >= #{startRegisterTime}
+			</if>
+			<if test="endRegisterTime != null">
+				AND register_time <![CDATA[ <= ]]> #{endRegisterTime}
+			</if>
+		</where>
+	</select>
+	<select id="totalByParent3Id" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(COUNT(1),0) count, IFNULL(SUM(buy_charge),0) money, IFNULL(SUM(withdraw),0) money2
+		FROM z_user
+		<where>
+			parent3_id = #{userId}
+			<if test="startRegisterTime != null">
+				AND register_time >= #{startRegisterTime}
+			</if>
+			<if test="endRegisterTime != null">
+				AND register_time <![CDATA[ <= ]]> #{endRegisterTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="totalActiveByParentId" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(COUNT(1),0) count
+		FROM z_user
+		<where>
+			parent_id = #{userId} and charge > 0
+		</where>
+	</select>
+
+	<update id="addChildChargeById"  parameterType="java.util.List">
+		update 	z_user set total_child_charge = (total_child_charge + ${money}) where id in
+		<foreach  open="(" close=")" collection="idList" item="listItem" separator=",">
+			${listItem}
+		</foreach>
+	</update>
+
+	<select id="selectChildList" resultType="string">
+		select getChildList(${rootId},${depth});
+	</select>
+
+	<select id="selectChildSum" resultType="com.ruoyi.system.zny.vo.ChildSum">
+		select count(1) count,sum(charge) totalCharge,sum(withdraw) totalWithdraw, cast( sum(case when charge > 0 then 1 else 0 END ) as signed ) as totalChargeUser from z_user
+		<where>
+			id in
+			<foreach close=")" collection="idList" item="listItem" open="(" separator=",">
+				#{listItem}
+			</foreach>
+		</where>
+	</select>
+	<select id="lockForUpdate" parameterType="java.lang.Long"  resultType="com.ruoyi.system.zny.entity.User">
+		select * from z_user  where id = #{id,jdbcType=BIGINT} FOR UPDATE
+	</select>
+
+	<select id="selectParentList" resultType="string">
+		select queryParent_user(${rootId});
+	</select>
+
+
+</mapper>

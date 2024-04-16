@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.mapper.BuyPrizeMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.system.zny.entity.BuyPrize">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="product_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sign_money" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="product_money" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="money" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="point" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="product_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="promise_money" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, product_id, `name`, sign_money, product_money, money, point, product_count, promise_money, 
+    create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.ruoyi.system.zny.entity.BuyPrizeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from z_buy_prize
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from z_buy_prize
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from z_buy_prize
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ruoyi.system.zny.entity.BuyPrizeExample">
+    delete from z_buy_prize
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ruoyi.system.zny.entity.BuyPrize">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into z_buy_prize (product_id, `name`, sign_money, 
+      product_money, money, point, 
+      product_count, promise_money, create_time
+      )
+    values (#{productId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{signMoney,jdbcType=DECIMAL}, 
+      #{productMoney,jdbcType=DECIMAL}, #{money,jdbcType=DECIMAL}, #{point,jdbcType=INTEGER}, 
+      #{productCount,jdbcType=INTEGER}, #{promiseMoney,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruoyi.system.zny.entity.BuyPrize">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into z_buy_prize
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="signMoney != null">
+        sign_money,
+      </if>
+      <if test="productMoney != null">
+        product_money,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="point != null">
+        point,
+      </if>
+      <if test="productCount != null">
+        product_count,
+      </if>
+      <if test="promiseMoney != null">
+        promise_money,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="signMoney != null">
+        #{signMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="productMoney != null">
+        #{productMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="point != null">
+        #{point,jdbcType=INTEGER},
+      </if>
+      <if test="productCount != null">
+        #{productCount,jdbcType=INTEGER},
+      </if>
+      <if test="promiseMoney != null">
+        #{promiseMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ruoyi.system.zny.entity.BuyPrizeExample" resultType="java.lang.Long">
+    select count(*) from z_buy_prize
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update z_buy_prize
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signMoney != null">
+        sign_money = #{record.signMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productMoney != null">
+        product_money = #{record.productMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.money != null">
+        money = #{record.money,jdbcType=DECIMAL},
+      </if>
+      <if test="record.point != null">
+        point = #{record.point,jdbcType=INTEGER},
+      </if>
+      <if test="record.productCount != null">
+        product_count = #{record.productCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.promiseMoney != null">
+        promise_money = #{record.promiseMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update z_buy_prize
+    set id = #{record.id,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=BIGINT},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      sign_money = #{record.signMoney,jdbcType=DECIMAL},
+      product_money = #{record.productMoney,jdbcType=DECIMAL},
+      money = #{record.money,jdbcType=DECIMAL},
+      point = #{record.point,jdbcType=INTEGER},
+      product_count = #{record.productCount,jdbcType=INTEGER},
+      promise_money = #{record.promiseMoney,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.system.zny.entity.BuyPrize">
+    update z_buy_prize
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="signMoney != null">
+        sign_money = #{signMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="productMoney != null">
+        product_money = #{productMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="point != null">
+        point = #{point,jdbcType=INTEGER},
+      </if>
+      <if test="productCount != null">
+        product_count = #{productCount,jdbcType=INTEGER},
+      </if>
+      <if test="promiseMoney != null">
+        promise_money = #{promiseMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.system.zny.entity.BuyPrize">
+    update z_buy_prize
+    set product_id = #{productId,jdbcType=BIGINT},
+      `name` = #{name,jdbcType=VARCHAR},
+      sign_money = #{signMoney,jdbcType=DECIMAL},
+      product_money = #{productMoney,jdbcType=DECIMAL},
+      money = #{money,jdbcType=DECIMAL},
+      point = #{point,jdbcType=INTEGER},
+      product_count = #{productCount,jdbcType=INTEGER},
+      promise_money = #{promiseMoney,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

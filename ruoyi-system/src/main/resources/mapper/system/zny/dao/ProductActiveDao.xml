@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.ProductActiveDao">
+
+	<select id="selectByCondition" resultType="com.ruoyi.system.zny.vo.ProductActiveVo">
+		SELECT a.*,  p.name productName, p.fouth_value fouthValue, p.fouth_real_value fouthRealValue,
+		p.second second, p.second_value secondValue ,
+		p.third third,p.third_value thirdValue, p.third_real_value thirdRealValue,
+		p.type type, p.type2 type2,
+		ap.desc processName
+		FROM z_product_active a
+		LEFT JOIN z_product p ON a.product_id = p.id
+		LEFT JOIN z_product_active_process ap ON a.status = ap.id
+		<where>
+			<if test="param != null">
+				<if test="param.id != null">
+					AND a.id = #{param.id}
+				</if>
+				<if test="param.productId != null">
+					AND a.product_id = #{param.productId}
+				</if>
+				<if test="param.userId != null">
+					AND a.user_id = #{param.userId}
+				</if>
+				<if test="param.status != null">
+					AND a.status = #{param.status}
+				</if>
+				<if test="param.tel != null">
+					AND a.tel = #{param.tel}
+				</if>
+			</if>
+			<if test="productIdList != null and productIdList.size > 0">
+				AND a.product_id IN
+				<foreach collection="productIdList" item="productId" separator="," open="(" close=")">
+					#{productId}
+				</foreach>
+			</if>
+			<if test="startTime != null">
+				AND a.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND a.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		</where>
+		ORDER BY a.id DESC
+	</select>
+	
+	<select id="selectGroupParentId" resultType="com.ruoyi.system.zny.vo.ProductActiveCount">
+		SELECT parent_id userId, COUNT(1) count
+		FROM z_product_active 
+		<where>
+			<if test="startTime != null">
+				AND create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		</where>
+		GROUP BY parent_id
+	</select>
+
+	<select id="selectGroupUserId" resultType="com.ruoyi.system.zny.vo.ProductActiveCount">
+		SELECT user_id userId, COUNT(1) count
+		FROM z_product_active
+		<where>
+			<if test="startTime != null">
+				AND create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		</where>
+		GROUP BY user_id
+	</select>
+
+
+
+	<select id="selectBuyPersonByParentId" resultType="com.ruoyi.system.zny.vo.ProductActiveCount">
+		SELECT parent_id userId, count(distinct(user_id)) count
+		FROM z_product_active
+		<where>
+			<if test="startTime != null">
+				AND create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+			<if test="userId != null">
+				AND parent_id = #{userId}
+			</if>
+		</where>
+		GROUP BY parent_id
+	</select>
+
+
+	<select id="selectBuyPersonByParentIdAndPid" resultType="com.ruoyi.system.zny.vo.ProductActiveCount">
+		SELECT parent_id userId,product_id productId, count(distinct(user_id)) count
+		FROM z_product_active
+		<where>
+			<if test="startTime != null">
+				AND create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+			<if test="userId != null">
+				AND parent_id = #{userId}
+			</if>
+			and parent_id is not null
+		</where>
+		GROUP BY parent_id,product_id
+	</select>
+	
+	<select id="total" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT SUM(p.price) money, SUM(p.product_count) count
+		FROM z_product_active a
+		LEFT JOIN z_product p ON a.product_id = p.id
+		<where>
+			<if test="userId != null">
+				AND a.user_id = #{userId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="totalByCount" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(SUM(p.price),0) money, IFNULL(COUNT(DISTINCT(a.user_id)),0) count
+		FROM z_product_active a
+		LEFT JOIN z_product p ON a.product_id = p.id
+		LEFT JOIN z_user u ON a.user_id = u.id
+		<where>
+			<if test="startTime != null">
+				AND a.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND a.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+			<if test="topId != null">
+				AND u.top_id = #{topId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectHighest" resultType="com.ruoyi.system.zny.entity.ProductActive">
+		SELECT * 
+		FROM z_product_active
+		<where>
+			user_id = #{userId}
+		</where>	
+		ORDER BY product_id DESC
+		LIMIT 1
+	</select>
+	
+	<select id="selectLastOneByUserIdAndProductId" resultType="com.ruoyi.system.zny.entity.ProductActive">
+		SELECT * 
+		FROM z_product_active
+		<where>
+			user_id = #{userId} AND product_id = #{productId}
+		</where>
+		ORDER BY id DESC 
+		LIMIT 1
+	</select>
+	
+	<select id="selectFirstByUserIdAndProductId" resultType="com.ruoyi.system.zny.entity.ProductActive">
+		SELECT * 
+		FROM z_product_active
+		<where>
+			user_id = #{userId} AND product_id = #{productId}
+		</where>
+		LIMIT 1
+	</select>
+	
+	<select id="activeTotalByUserId" resultType="java.math.BigDecimal">
+		SELECT SUM(product_money) FROM z_product_active
+		<where>
+			<if test="userId != null">
+				AND user_id = #{userId}
+			</if>
+			<if test="productId != null">
+				AND product_id = #{productId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="totalUserProductMoneyByUserId" resultType="java.math.BigDecimal">
+		SELECT IFNULL(SUM(user_product_money), 0) FROM z_product_active where user_id = #{userId}
+	</select>
+
+</mapper>

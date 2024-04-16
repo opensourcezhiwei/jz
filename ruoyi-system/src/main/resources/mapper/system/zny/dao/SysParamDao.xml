@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.SysParamDao">
+
+	<update id="replaceWebsiteParam">
+		REPLACE z_website_param(id, name, roll_content, kf_url1, kf_url2, 
+				kf_name1, kf_qrcode1, kf_name2, kf_qrcode2, kf_name3, kf_qrcode3,
+				qq1, qq2, qq3, qq4, qq5, app_download_url, logo_url, start_url)
+			VALUES(#{param.id}, #{param.name}, #{param.rollContent}, #{param.kfUrl1}, #{param.kfUrl2}, 
+				#{param.kfName1}, #{param.kfQrcode1}, #{param.kfName2}, #{param.kfQrcode2}, #{param.kfName3}, #{param.kfQrcode3},
+				#{param.qq1}, #{param.qq2}, #{param.qq3}, #{param.qq4}, #{param.qq5}, #{param.appDownloadUrl}, #{param.logoUrl}, #{param.startUrl})
+	</update>
+
+</mapper>

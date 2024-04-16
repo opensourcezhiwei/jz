@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.WithdrawDao">
+
+	<select id="selectByCondition" parameterType="com.ruoyi.system.zny.vo.WithdrawVo" resultType="com.ruoyi.system.zny.vo.WithdrawVo">
+		SELECT w.*, u.tel tel, substring_index(IFNULL(bank_card_info,""),'|', 1) bankAccount, substring_index(IFNULL(bank_card_info,""),'|', -1) bankNo,substring_index(substring_index(IFNULL(bank_card_info,""),'|', 2),'|',-1) bankName,
+			case w.status when 1 then '审核中' when 2 then '审核成功' when 3 then '审核失败' else '无法识别' end statusDesc
+		FROM z_withdraw w
+		LEFT JOIN z_user u ON w.user_id = u.id
+		<where>
+			<if test="param != null">
+				<if test="param.userId != null">
+					AND w.user_id = #{param.userId}
+				</if>
+				<if test="param.id != null">
+					AND w.id = #{param.id}
+				</if>
+				<if test="param.username != null and param.username != ''">
+					AND w.username = #{param.username}
+				</if>
+				<if test="param.status != null">
+					AND w.status = #{param.status}				
+				</if>
+				<if test="param.tel != null and param.tel != ''">
+					AND u.tel = #{param.tel}
+				</if>
+				<if test="topId != null">
+					AND u.top_id = #{topId}
+				</if>
+			</if>
+			<if test="startTime != null">
+				AND w.create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND w.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		</where>
+		ORDER BY id DESC
+	</select>
+	
+	<select id="selectCountByStatusAndDate" resultType="java.lang.Integer">
+		SELECT IFNULL(COUNT(1), 0)
+		FROM z_withdraw
+		<where>
+			<if test="param != null">
+				<if test="param.userId != null">
+					AND user_id = #{param.userId}
+				</if>
+			</if>
+			<if test="statusList != null and statusList.size > 0">
+				AND status IN 
+				<foreach collection="statusList" open="(" close=")" separator="," item="status">
+					#{status}
+				</foreach>
+			</if>
+			<if test="startTime != null">
+				AND create_time >= #{startTime}
+			</if>
+			<if test="endTime != null">
+				AND create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+		</where>
+	</select>
+
+	<select id="totalByDate" resultType="com.ruoyi.system.zny.vo.TotalCountVo">
+		SELECT IFNULL(COUNT(1),0) count, IFNULL(SUM(amount),0) money
+		FROM z_withdraw w
+		LEFT JOIN z_user u ON w.user_id = u.id
+		<where>
+			<if test="status != null">
+				AND w.status = #{status}
+			</if>
+			<if test="startTime">
+				AND w.create_time >= #{startTime}
+			</if>
+			<if test="endTime">
+				AND w.create_time <![CDATA[ <= ]]> #{endTime}
+			</if>
+			<if test="topId != null">
+				AND u.top_id = #{topId}
+			</if>
+		</where>
+	</select>
+	
+	<select id="withdrawTotalByMinutes" resultType="com.ruoyi.system.zny.vo.ChildCount">
+		SELECT u.id userId, COUNT(p.id) count
+		FROM z_withdraw p
+		LEFT JOIN z_user u ON p.user_id = u.id
+		<where>
+			<if test="userId != null">
+				AND u.id = #{userId}
+			</if>
+			<if test="tel != null and tel != ''">
+				AND u.tel = #{tel}
+			</if>
+			<if test="minutes != null">
+				AND p.create_time BETWEEN date_add(now(), interval - #{minutes} minute) AND now();
+			</if>
+		</where>
+		GROUP BY p.user_id
+		ORDER BY COUNT(p.id) DESC
+	</select>
+</mapper>

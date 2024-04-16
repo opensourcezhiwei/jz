@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.CountLogDao">
+
+	<select id="totalByType" resultType="java.math.BigDecimal">
+		SELECT IFNULL(SUM(l.money),0)
+		FROM z_count_log l
+		LEFT JOIN z_user u ON l.user_id = u.id
+		<where>
+			<if test="moneyType != null and moneyType != ''">
+				AND l.money_type = #{moneyType}
+			</if>
+			<if test="topId != null">
+				AND u.top_id = #{topId}
+			</if>
+			<if test="userId != null">
+				AND l.user_id = #{userId}
+			</if>
+			<if test="typeList != null and typeList.size > 0">
+				AND l.money_type IN 
+				<foreach collection="typeList" item="moneyType" open="(" close=")" separator=",">
+					#{moneyType}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectByCondition" parameterType="com.ruoyi.system.zny.entity.CountLog" resultType="com.ruoyi.system.zny.vo.CountLogVo">
+		SELECT l.*, u.tel tel
+		FROM z_count_log l
+		LEFT JOIN z_user u ON l.user_id = u.id
+		<where>
+			<if test="param != null">
+				<if test="param.type != null and param.type != ''">
+					AND l.type = #{param.type}
+				</if>
+				<if test="param.userId != null">
+					AND l.user_id = #{param.userId}
+				</if>
+				<if test="param.moneyType != null and param.moneyType != ''">
+					AND l.money_type = #{param.moneyType}
+				</if>
+				<if test="topId != null">
+					AND u.top_id = #{topId}
+				</if>
+				<if test="tel != null and tel != ''">
+					AND u.tel = #{tel}
+				</if>
+			</if>
+			<if test="typeList != null and typeList.size > 0">
+				AND l.money_type IN 
+				<foreach collection="typeList" item="type" open="(" close=")" separator=",">
+					#{type}
+				</foreach>
+			</if>
+		</where>
+		ORDER BY id DESC
+	</select>
+
+</mapper>

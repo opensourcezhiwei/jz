@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.dao.PayChannelDao">
+
+	<select id="selectOneByType" resultType="com.ruoyi.system.zny.entity.PayChannel">
+		SELECT *
+		FROM z_pay_channel
+		<where>
+			pay_type = #{type} AND max_amount >= #{amount} AND min_amount <![CDATA[ <= ]]> #{amount} AND `status` = 1
+		</where>
+		ORDER BY update_time
+		LIMIT 1
+	</select>
+
+</mapper>

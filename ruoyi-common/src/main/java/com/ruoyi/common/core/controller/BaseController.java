@@ -1,12 +1,5 @@
 package com.ruoyi.common.core.controller;
 
-import java.beans.PropertyEditorSupport;
-import java.util.Date;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.constant.HttpStatus;
@@ -20,6 +13,16 @@ import com.ruoyi.common.utils.PageUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.sql.SqlUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.beans.PropertyEditorSupport;
+import java.util.Date;
+import java.util.List;
 
 /**
  * web层通用数据处理
@@ -89,6 +92,68 @@ public class BaseController
         rspData.setTotal(new PageInfo(list).getTotal());
         return rspData;
     }
+
+    /**
+     * 获取真实ip
+     */
+    protected String getIpAddr(HttpServletRequest request) {
+
+        String ip = request.getHeader("X-Forwarded-For");
+        if (!StringUtils.isNull(ip) && !"unKnown".equalsIgnoreCase(ip)) {
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            int index = ip.indexOf(",");
+            if (index != -1) {
+                return ip.substring(0, index);
+            } else {
+                return ip;
+            }
+        }
+        ip = request.getHeader("X-Real-IP");
+        if (!StringUtils.isNull(ip) && !"unKnown".equalsIgnoreCase(ip)) {
+            return ip;
+        }
+        return request.getRemoteAddr();
+//		String ip = request.getHeader("x-forwarded-for");
+//		if (ip == null) {
+//			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//				ip = request.getHeader("Proxy-Client-IP");
+//			}
+//			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//				ip = request.getHeader("WL-Proxy-Client-IP");
+//			}
+//			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//				ip = request.getHeader("HTTP_CLIENT_IP");
+//			}
+//			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//				ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+//			}
+//			if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+//				ip = request.getRemoteAddr();
+//			}
+//		}
+//		return ip;
+    }
+
+
+
+
+    protected String getSessionId(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            if ("sessionId".equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
+
+    protected String getSessionIdInHeader(HttpServletRequest request) {
+        return request.getHeader("sessionId");
+    }
+
 
     /**
      * 返回成功

@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.mapper.LoanMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.system.zny.entity.Loan">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="money_pre" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="period_pre" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="money_back" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="rate" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="user_id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="tel" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="zhima_img" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="realname" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="product_count_img" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="memo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, `name`, money_pre, period_pre, money_back, rate, user_id, tel, zhima_img, realname, 
+    product_count_img, memo, `status`, create_time, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.ruoyi.system.zny.entity.LoanExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from z_loan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from z_loan
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from z_loan
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ruoyi.system.zny.entity.LoanExample">
+    delete from z_loan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ruoyi.system.zny.entity.Loan">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into z_loan (`name`, money_pre, period_pre, 
+      money_back, rate, user_id, 
+      tel, zhima_img, realname, 
+      product_count_img, memo, `status`, 
+      create_time, update_time)
+    values (#{name,jdbcType=VARCHAR}, #{moneyPre,jdbcType=DECIMAL}, #{periodPre,jdbcType=INTEGER}, 
+      #{moneyBack,jdbcType=DECIMAL}, #{rate,jdbcType=DECIMAL}, #{userId,jdbcType=BIGINT}, 
+      #{tel,jdbcType=VARCHAR}, #{zhimaImg,jdbcType=VARCHAR}, #{realname,jdbcType=VARCHAR}, 
+      #{productCountImg,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruoyi.system.zny.entity.Loan">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into z_loan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="moneyPre != null">
+        money_pre,
+      </if>
+      <if test="periodPre != null">
+        period_pre,
+      </if>
+      <if test="moneyBack != null">
+        money_back,
+      </if>
+      <if test="rate != null">
+        rate,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="tel != null">
+        tel,
+      </if>
+      <if test="zhimaImg != null">
+        zhima_img,
+      </if>
+      <if test="realname != null">
+        realname,
+      </if>
+      <if test="productCountImg != null">
+        product_count_img,
+      </if>
+      <if test="memo != null">
+        memo,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyPre != null">
+        #{moneyPre,jdbcType=DECIMAL},
+      </if>
+      <if test="periodPre != null">
+        #{periodPre,jdbcType=INTEGER},
+      </if>
+      <if test="moneyBack != null">
+        #{moneyBack,jdbcType=DECIMAL},
+      </if>
+      <if test="rate != null">
+        #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="tel != null">
+        #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="zhimaImg != null">
+        #{zhimaImg,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="productCountImg != null">
+        #{productCountImg,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ruoyi.system.zny.entity.LoanExample" resultType="java.lang.Long">
+    select count(*) from z_loan
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update z_loan
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.moneyPre != null">
+        money_pre = #{record.moneyPre,jdbcType=DECIMAL},
+      </if>
+      <if test="record.periodPre != null">
+        period_pre = #{record.periodPre,jdbcType=INTEGER},
+      </if>
+      <if test="record.moneyBack != null">
+        money_back = #{record.moneyBack,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rate != null">
+        rate = #{record.rate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.tel != null">
+        tel = #{record.tel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zhimaImg != null">
+        zhima_img = #{record.zhimaImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.realname != null">
+        realname = #{record.realname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productCountImg != null">
+        product_count_img = #{record.productCountImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memo != null">
+        memo = #{record.memo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update z_loan
+    set id = #{record.id,jdbcType=BIGINT},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      money_pre = #{record.moneyPre,jdbcType=DECIMAL},
+      period_pre = #{record.periodPre,jdbcType=INTEGER},
+      money_back = #{record.moneyBack,jdbcType=DECIMAL},
+      rate = #{record.rate,jdbcType=DECIMAL},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      tel = #{record.tel,jdbcType=VARCHAR},
+      zhima_img = #{record.zhimaImg,jdbcType=VARCHAR},
+      realname = #{record.realname,jdbcType=VARCHAR},
+      product_count_img = #{record.productCountImg,jdbcType=VARCHAR},
+      memo = #{record.memo,jdbcType=VARCHAR},
+      `status` = #{record.status,jdbcType=TINYINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.system.zny.entity.Loan">
+    update z_loan
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="moneyPre != null">
+        money_pre = #{moneyPre,jdbcType=DECIMAL},
+      </if>
+      <if test="periodPre != null">
+        period_pre = #{periodPre,jdbcType=INTEGER},
+      </if>
+      <if test="moneyBack != null">
+        money_back = #{moneyBack,jdbcType=DECIMAL},
+      </if>
+      <if test="rate != null">
+        rate = #{rate,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="tel != null">
+        tel = #{tel,jdbcType=VARCHAR},
+      </if>
+      <if test="zhimaImg != null">
+        zhima_img = #{zhimaImg,jdbcType=VARCHAR},
+      </if>
+      <if test="realname != null">
+        realname = #{realname,jdbcType=VARCHAR},
+      </if>
+      <if test="productCountImg != null">
+        product_count_img = #{productCountImg,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null">
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.system.zny.entity.Loan">
+    update z_loan
+    set `name` = #{name,jdbcType=VARCHAR},
+      money_pre = #{moneyPre,jdbcType=DECIMAL},
+      period_pre = #{periodPre,jdbcType=INTEGER},
+      money_back = #{moneyBack,jdbcType=DECIMAL},
+      rate = #{rate,jdbcType=DECIMAL},
+      user_id = #{userId,jdbcType=BIGINT},
+      tel = #{tel,jdbcType=VARCHAR},
+      zhima_img = #{zhimaImg,jdbcType=VARCHAR},
+      realname = #{realname,jdbcType=VARCHAR},
+      product_count_img = #{productCountImg,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

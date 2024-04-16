@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.zny.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.system.zny.entity.Product">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="product_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="memo1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="memo2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="first" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="first_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="first_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="second" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="second_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="second_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="third" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="third_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="third_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="fouth" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="fouth_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="fouth_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="fifth" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="fifth_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="fifth_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type2" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type3" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type4" javaType="java.lang.Byte" jdbcType="TINYINT" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.ruoyi.system.zny.entity.Product">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="product_count" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="memo1" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="memo2" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="first" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="first_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="first_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="second" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="second_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="second_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="third" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="third_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="third_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="fouth" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="fouth_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="fouth_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="fifth" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="fifth_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="fifth_real_value" javaType="java.math.BigDecimal" jdbcType="DECIMAL" />
+      <arg column="status" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type2" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type3" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="type4" javaType="java.lang.Byte" jdbcType="TINYINT" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="LONGVARCHAR" />
+    </constructor>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, `name`, price, product_count, url, memo1, memo2, `first`, `first_value`, first_real_value, 
+    `second`, second_value, second_real_value, third, third_value, third_real_value, 
+    fouth, fouth_value, fouth_real_value, fifth, fifth_value, fifth_real_value, `status`, 
+    `type`, type2, type3, type4
+  </sql>
+  <sql id="Blob_Column_List">
+    remark
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.ruoyi.system.zny.entity.ProductExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from z_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.ruoyi.system.zny.entity.ProductExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from z_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from z_product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from z_product
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ruoyi.system.zny.entity.ProductExample">
+    delete from z_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ruoyi.system.zny.entity.Product">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into z_product (`name`, price, product_count, 
+      url, memo1, memo2, 
+      `first`, `first_value`, first_real_value, 
+      `second`, second_value, second_real_value, 
+      third, third_value, third_real_value, 
+      fouth, fouth_value, fouth_real_value, 
+      fifth, fifth_value, fifth_real_value, 
+      `status`, `type`, type2, 
+      type3, type4, remark
+      )
+    values (#{name,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, #{productCount,jdbcType=INTEGER}, 
+      #{url,jdbcType=VARCHAR}, #{memo1,jdbcType=VARCHAR}, #{memo2,jdbcType=VARCHAR}, 
+      #{first,jdbcType=INTEGER}, #{firstValue,jdbcType=DECIMAL}, #{firstRealValue,jdbcType=DECIMAL}, 
+      #{second,jdbcType=INTEGER}, #{secondValue,jdbcType=DECIMAL}, #{secondRealValue,jdbcType=DECIMAL}, 
+      #{third,jdbcType=INTEGER}, #{thirdValue,jdbcType=DECIMAL}, #{thirdRealValue,jdbcType=DECIMAL}, 
+      #{fouth,jdbcType=INTEGER}, #{fouthValue,jdbcType=DECIMAL}, #{fouthRealValue,jdbcType=DECIMAL}, 
+      #{fifth,jdbcType=INTEGER}, #{fifthValue,jdbcType=DECIMAL}, #{fifthRealValue,jdbcType=DECIMAL}, 
+      #{status,jdbcType=TINYINT}, #{type,jdbcType=TINYINT}, #{type2,jdbcType=TINYINT}, 
+      #{type3,jdbcType=TINYINT}, #{type4,jdbcType=TINYINT}, #{remark,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ruoyi.system.zny.entity.Product">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into z_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="productCount != null">
+        product_count,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="memo1 != null">
+        memo1,
+      </if>
+      <if test="memo2 != null">
+        memo2,
+      </if>
+      <if test="first != null">
+        `first`,
+      </if>
+      <if test="firstValue != null">
+        `first_value`,
+      </if>
+      <if test="firstRealValue != null">
+        first_real_value,
+      </if>
+      <if test="second != null">
+        `second`,
+      </if>
+      <if test="secondValue != null">
+        second_value,
+      </if>
+      <if test="secondRealValue != null">
+        second_real_value,
+      </if>
+      <if test="third != null">
+        third,
+      </if>
+      <if test="thirdValue != null">
+        third_value,
+      </if>
+      <if test="thirdRealValue != null">
+        third_real_value,
+      </if>
+      <if test="fouth != null">
+        fouth,
+      </if>
+      <if test="fouthValue != null">
+        fouth_value,
+      </if>
+      <if test="fouthRealValue != null">
+        fouth_real_value,
+      </if>
+      <if test="fifth != null">
+        fifth,
+      </if>
+      <if test="fifthValue != null">
+        fifth_value,
+      </if>
+      <if test="fifthRealValue != null">
+        fifth_real_value,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="type2 != null">
+        type2,
+      </if>
+      <if test="type3 != null">
+        type3,
+      </if>
+      <if test="type4 != null">
+        type4,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="productCount != null">
+        #{productCount,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="memo1 != null">
+        #{memo1,jdbcType=VARCHAR},
+      </if>
+      <if test="memo2 != null">
+        #{memo2,jdbcType=VARCHAR},
+      </if>
+      <if test="first != null">
+        #{first,jdbcType=INTEGER},
+      </if>
+      <if test="firstValue != null">
+        #{firstValue,jdbcType=DECIMAL},
+      </if>
+      <if test="firstRealValue != null">
+        #{firstRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="second != null">
+        #{second,jdbcType=INTEGER},
+      </if>
+      <if test="secondValue != null">
+        #{secondValue,jdbcType=DECIMAL},
+      </if>
+      <if test="secondRealValue != null">
+        #{secondRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="third != null">
+        #{third,jdbcType=INTEGER},
+      </if>
+      <if test="thirdValue != null">
+        #{thirdValue,jdbcType=DECIMAL},
+      </if>
+      <if test="thirdRealValue != null">
+        #{thirdRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="fouth != null">
+        #{fouth,jdbcType=INTEGER},
+      </if>
+      <if test="fouthValue != null">
+        #{fouthValue,jdbcType=DECIMAL},
+      </if>
+      <if test="fouthRealValue != null">
+        #{fouthRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="fifth != null">
+        #{fifth,jdbcType=INTEGER},
+      </if>
+      <if test="fifthValue != null">
+        #{fifthValue,jdbcType=DECIMAL},
+      </if>
+      <if test="fifthRealValue != null">
+        #{fifthRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="type2 != null">
+        #{type2,jdbcType=TINYINT},
+      </if>
+      <if test="type3 != null">
+        #{type3,jdbcType=TINYINT},
+      </if>
+      <if test="type4 != null">
+        #{type4,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ruoyi.system.zny.entity.ProductExample" resultType="java.lang.Long">
+    select count(*) from z_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update z_product
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productCount != null">
+        product_count = #{record.productCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memo1 != null">
+        memo1 = #{record.memo1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memo2 != null">
+        memo2 = #{record.memo2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.first != null">
+        `first` = #{record.first,jdbcType=INTEGER},
+      </if>
+      <if test="record.firstValue != null">
+        `first_value` = #{record.firstValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.firstRealValue != null">
+        first_real_value = #{record.firstRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.second != null">
+        `second` = #{record.second,jdbcType=INTEGER},
+      </if>
+      <if test="record.secondValue != null">
+        second_value = #{record.secondValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.secondRealValue != null">
+        second_real_value = #{record.secondRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.third != null">
+        third = #{record.third,jdbcType=INTEGER},
+      </if>
+      <if test="record.thirdValue != null">
+        third_value = #{record.thirdValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.thirdRealValue != null">
+        third_real_value = #{record.thirdRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fouth != null">
+        fouth = #{record.fouth,jdbcType=INTEGER},
+      </if>
+      <if test="record.fouthValue != null">
+        fouth_value = #{record.fouthValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fouthRealValue != null">
+        fouth_real_value = #{record.fouthRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fifth != null">
+        fifth = #{record.fifth,jdbcType=INTEGER},
+      </if>
+      <if test="record.fifthValue != null">
+        fifth_value = #{record.fifthValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fifthRealValue != null">
+        fifth_real_value = #{record.fifthRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.status != null">
+        `status` = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.type != null">
+        `type` = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.type2 != null">
+        type2 = #{record.type2,jdbcType=TINYINT},
+      </if>
+      <if test="record.type3 != null">
+        type3 = #{record.type3,jdbcType=TINYINT},
+      </if>
+      <if test="record.type4 != null">
+        type4 = #{record.type4,jdbcType=TINYINT},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update z_product
+    set id = #{record.id,jdbcType=INTEGER},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      product_count = #{record.productCount,jdbcType=INTEGER},
+      url = #{record.url,jdbcType=VARCHAR},
+      memo1 = #{record.memo1,jdbcType=VARCHAR},
+      memo2 = #{record.memo2,jdbcType=VARCHAR},
+      `first` = #{record.first,jdbcType=INTEGER},
+      `first_value` = #{record.firstValue,jdbcType=DECIMAL},
+      first_real_value = #{record.firstRealValue,jdbcType=DECIMAL},
+      `second` = #{record.second,jdbcType=INTEGER},
+      second_value = #{record.secondValue,jdbcType=DECIMAL},
+      second_real_value = #{record.secondRealValue,jdbcType=DECIMAL},
+      third = #{record.third,jdbcType=INTEGER},
+      third_value = #{record.thirdValue,jdbcType=DECIMAL},
+      third_real_value = #{record.thirdRealValue,jdbcType=DECIMAL},
+      fouth = #{record.fouth,jdbcType=INTEGER},
+      fouth_value = #{record.fouthValue,jdbcType=DECIMAL},
+      fouth_real_value = #{record.fouthRealValue,jdbcType=DECIMAL},
+      fifth = #{record.fifth,jdbcType=INTEGER},
+      fifth_value = #{record.fifthValue,jdbcType=DECIMAL},
+      fifth_real_value = #{record.fifthRealValue,jdbcType=DECIMAL},
+      `status` = #{record.status,jdbcType=TINYINT},
+      `type` = #{record.type,jdbcType=TINYINT},
+      type2 = #{record.type2,jdbcType=TINYINT},
+      type3 = #{record.type3,jdbcType=TINYINT},
+      type4 = #{record.type4,jdbcType=TINYINT},
+      remark = #{record.remark,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update z_product
+    set id = #{record.id,jdbcType=INTEGER},
+      `name` = #{record.name,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      product_count = #{record.productCount,jdbcType=INTEGER},
+      url = #{record.url,jdbcType=VARCHAR},
+      memo1 = #{record.memo1,jdbcType=VARCHAR},
+      memo2 = #{record.memo2,jdbcType=VARCHAR},
+      `first` = #{record.first,jdbcType=INTEGER},
+      `first_value` = #{record.firstValue,jdbcType=DECIMAL},
+      first_real_value = #{record.firstRealValue,jdbcType=DECIMAL},
+      `second` = #{record.second,jdbcType=INTEGER},
+      second_value = #{record.secondValue,jdbcType=DECIMAL},
+      second_real_value = #{record.secondRealValue,jdbcType=DECIMAL},
+      third = #{record.third,jdbcType=INTEGER},
+      third_value = #{record.thirdValue,jdbcType=DECIMAL},
+      third_real_value = #{record.thirdRealValue,jdbcType=DECIMAL},
+      fouth = #{record.fouth,jdbcType=INTEGER},
+      fouth_value = #{record.fouthValue,jdbcType=DECIMAL},
+      fouth_real_value = #{record.fouthRealValue,jdbcType=DECIMAL},
+      fifth = #{record.fifth,jdbcType=INTEGER},
+      fifth_value = #{record.fifthValue,jdbcType=DECIMAL},
+      fifth_real_value = #{record.fifthRealValue,jdbcType=DECIMAL},
+      `status` = #{record.status,jdbcType=TINYINT},
+      `type` = #{record.type,jdbcType=TINYINT},
+      type2 = #{record.type2,jdbcType=TINYINT},
+      type3 = #{record.type3,jdbcType=TINYINT},
+      type4 = #{record.type4,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.system.zny.entity.Product">
+    update z_product
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="productCount != null">
+        product_count = #{productCount,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="memo1 != null">
+        memo1 = #{memo1,jdbcType=VARCHAR},
+      </if>
+      <if test="memo2 != null">
+        memo2 = #{memo2,jdbcType=VARCHAR},
+      </if>
+      <if test="first != null">
+        `first` = #{first,jdbcType=INTEGER},
+      </if>
+      <if test="firstValue != null">
+        `first_value` = #{firstValue,jdbcType=DECIMAL},
+      </if>
+      <if test="firstRealValue != null">
+        first_real_value = #{firstRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="second != null">
+        `second` = #{second,jdbcType=INTEGER},
+      </if>
+      <if test="secondValue != null">
+        second_value = #{secondValue,jdbcType=DECIMAL},
+      </if>
+      <if test="secondRealValue != null">
+        second_real_value = #{secondRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="third != null">
+        third = #{third,jdbcType=INTEGER},
+      </if>
+      <if test="thirdValue != null">
+        third_value = #{thirdValue,jdbcType=DECIMAL},
+      </if>
+      <if test="thirdRealValue != null">
+        third_real_value = #{thirdRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="fouth != null">
+        fouth = #{fouth,jdbcType=INTEGER},
+      </if>
+      <if test="fouthValue != null">
+        fouth_value = #{fouthValue,jdbcType=DECIMAL},
+      </if>
+      <if test="fouthRealValue != null">
+        fouth_real_value = #{fouthRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="fifth != null">
+        fifth = #{fifth,jdbcType=INTEGER},
+      </if>
+      <if test="fifthValue != null">
+        fifth_value = #{fifthValue,jdbcType=DECIMAL},
+      </if>
+      <if test="fifthRealValue != null">
+        fifth_real_value = #{fifthRealValue,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="type != null">
+        `type` = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="type2 != null">
+        type2 = #{type2,jdbcType=TINYINT},
+      </if>
+      <if test="type3 != null">
+        type3 = #{type3,jdbcType=TINYINT},
+      </if>
+      <if test="type4 != null">
+        type4 = #{type4,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ruoyi.system.zny.entity.Product">
+    update z_product
+    set `name` = #{name,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      product_count = #{productCount,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      memo1 = #{memo1,jdbcType=VARCHAR},
+      memo2 = #{memo2,jdbcType=VARCHAR},
+      `first` = #{first,jdbcType=INTEGER},
+      `first_value` = #{firstValue,jdbcType=DECIMAL},
+      first_real_value = #{firstRealValue,jdbcType=DECIMAL},
+      `second` = #{second,jdbcType=INTEGER},
+      second_value = #{secondValue,jdbcType=DECIMAL},
+      second_real_value = #{secondRealValue,jdbcType=DECIMAL},
+      third = #{third,jdbcType=INTEGER},
+      third_value = #{thirdValue,jdbcType=DECIMAL},
+      third_real_value = #{thirdRealValue,jdbcType=DECIMAL},
+      fouth = #{fouth,jdbcType=INTEGER},
+      fouth_value = #{fouthValue,jdbcType=DECIMAL},
+      fouth_real_value = #{fouthRealValue,jdbcType=DECIMAL},
+      fifth = #{fifth,jdbcType=INTEGER},
+      fifth_value = #{fifthValue,jdbcType=DECIMAL},
+      fifth_real_value = #{fifthRealValue,jdbcType=DECIMAL},
+      `status` = #{status,jdbcType=TINYINT},
+      `type` = #{type,jdbcType=TINYINT},
+      type2 = #{type2,jdbcType=TINYINT},
+      type3 = #{type3,jdbcType=TINYINT},
+      type4 = #{type4,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ruoyi.system.zny.entity.Product">
+    update z_product
+    set `name` = #{name,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      product_count = #{productCount,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      memo1 = #{memo1,jdbcType=VARCHAR},
+      memo2 = #{memo2,jdbcType=VARCHAR},
+      `first` = #{first,jdbcType=INTEGER},
+      `first_value` = #{firstValue,jdbcType=DECIMAL},
+      first_real_value = #{firstRealValue,jdbcType=DECIMAL},
+      `second` = #{second,jdbcType=INTEGER},
+      second_value = #{secondValue,jdbcType=DECIMAL},
+      second_real_value = #{secondRealValue,jdbcType=DECIMAL},
+      third = #{third,jdbcType=INTEGER},
+      third_value = #{thirdValue,jdbcType=DECIMAL},
+      third_real_value = #{thirdRealValue,jdbcType=DECIMAL},
+      fouth = #{fouth,jdbcType=INTEGER},
+      fouth_value = #{fouthValue,jdbcType=DECIMAL},
+      fouth_real_value = #{fouthRealValue,jdbcType=DECIMAL},
+      fifth = #{fifth,jdbcType=INTEGER},
+      fifth_value = #{fifthValue,jdbcType=DECIMAL},
+      fifth_real_value = #{fifthRealValue,jdbcType=DECIMAL},
+      `status` = #{status,jdbcType=TINYINT},
+      `type` = #{type,jdbcType=TINYINT},
+      type2 = #{type2,jdbcType=TINYINT},
+      type3 = #{type3,jdbcType=TINYINT},
+      type4 = #{type4,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
